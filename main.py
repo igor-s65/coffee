@@ -1,16 +1,17 @@
 import sqlite3
 import sys
-from PyQt5 import uic
+from addEditCoffeeForm import Ui_CoffeeForm
+from main_form import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTableWidgetItem, QTextEdit, QDialog, QMessageBox
 
 
-class Coffee(QMainWindow):
+class Coffee(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("main.ui", self)
+        self.setupUi(self)
         self.btn_add.clicked.connect(self.add_coffee)
         self.btn_edit.clicked.connect(self.edit_coffee)
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.con = sqlite3.connect("data/coffee.sqlite")
         self.newID = 0
         self.isEdit = False
         self.load_data()
@@ -84,13 +85,13 @@ class Coffee(QMainWindow):
         self.isEdit = False
 
 
-class AddEditCoffee(QDialog):
+class AddEditCoffee(QDialog, Ui_CoffeeForm):
 
     def __init__(self, parent=None):
         super().__init__()
-        uic.loadUi("addEditCoffeeForm.ui", self)
+        self.setupUi(self)
         self.parent = parent
-        self.con = sqlite3.connect("coffee.sqlite")
+        self.con = sqlite3.connect("data/coffee.sqlite")
         cur = self.con.cursor()
         ssql = "SELECT * FROM roastings order by name"
         self.roastings = cur.execute(ssql).fetchall()
